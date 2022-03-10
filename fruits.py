@@ -1,5 +1,7 @@
 import sqlite3
 
+from prettytable import PrettyTable
+
 connection = sqlite3.connect("fruits.db")
 
 table_list = connection.execute("select name from sqlite_master where type='table' and name='market'").fetchall()
@@ -26,7 +28,12 @@ while True:
     print("3. view all fruits")
     print("4. update an fruit using serialnumber")
     print("5. delete an fruit using amount")
-    print("6. exit")
+    print("6. view the most expensive fruit")
+    print("7. view the less expensive fruit")
+    print("8. disply sum of fruit prices")
+    print("9. display the fruits between the range")
+    print("10. display an average of total amount")
+    print("11. exit")
 
     choice = int(input("enter your choice: "))
 
@@ -47,24 +54,19 @@ while True:
 
         result = connection.execute("select * from market where fruitprice= "+getfruitprice)
 
+        table = PrettyTable(["Id","serialno","fruitname","fruitprice","exportplace","fruitamount"])
         for i in result:
-            print("Id =>",i[0])
-            print("serialno =>",i[1])
-            print("fruitname =>",i[2])
-            print("fruitprice =>",i[3])
-            print("exportplace =>",i[4])
-            print("fruitamount =>",i[5])
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
 
     elif choice == 3:
         result = connection.execute("select * from market")
 
+        table = PrettyTable(["Id","serialno","fruitname","fruitprice","exportplace","fruitamount"])
         for i in result:
-            print("Id =>",i[0])
-            print("serialno =>",i[1])
-            print("fruitname =>",i[2])
-            print("fruitprice =>",i[3])
-            print("exportplace =>",i[4])
-            print("fruitamount =>",i[5])
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
+
 
 
     elif choice == 4:
@@ -83,13 +85,10 @@ while True:
 
         print("data updated")
 
+        table = PrettyTable(["Id","serialno","fruitname","fruitprice","exportplace","fruitamount"])
         for i in result:
-            print("Id =>",i[0])
-            print("serialno =>",i[1])
-            print("fruitname =>",i[2])
-            print("fruitprice =>",i[3])
-            print("exportplace =>",i[4])
-            print("fruitamount =>",i[5])
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
 
     elif choice == 5:
         getfruitamount = input("enter the fruitamount: ")
@@ -103,15 +102,54 @@ while True:
 
         print("data updated")
 
+        table = PrettyTable(["Id","serialno","fruitname","fruitprice","exportplace","fruitamount"])
         for i in result:
-            print("Id =>",i[0])
-            print("serialno =>",i[1])
-            print("fruitname =>",i[2])
-            print("fruitprice =>",i[3])
-            print("exportplace =>",i[4])
-            print("fruitamount =>",i[5])
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
 
     elif choice == 6:
+        result = connection.execute("select max(fruitprice) as fruitprice from market")
+
+        table = PrettyTable(["fruitprice"])
+        for i in result:
+            table.add_row([i[0]])
+        print(table)
+
+    elif choice == 7:
+        result = connection.execute("select min(fruitprice) as fruitprice from market")
+
+        table = PrettyTable(["fruitprice"])
+        for i in result:
+            table.add_row([i[0]])
+        print(table)
+
+    elif choice == 8:
+        result = connection.execute("select sum(fruitprice) as fruitprice from market")
+
+        table = PrettyTable(["fruitprice"])
+        for i in result:
+            table.add_row([i[0]])
+        print(table)
+
+    elif choice == 9:
+        lowerrange = input("enter the lower range")
+        higherrange = input("enter the higher range")
+        result = connection.execute("select * from market where fruitprice between " + lowerrange + " AND " + higherrange + "")
+
+        table = PrettyTable(["Id","serialno","fruitname","fruitprice","exportplace","fruitamount"])
+        for i in result:
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
+
+    elif choice == 10:
+        result = connection.execute("select avg(fruitamount) as fruitamount from market")
+
+        table = PrettyTable(["fruitamount"])
+        for i in result:
+            table.add_row([i[0]])
+        print(table)
+
+    elif choice == 11:
         break
 
     else:
